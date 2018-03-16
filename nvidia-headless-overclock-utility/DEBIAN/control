@@ -1,0 +1,7 @@
+Package: nvidia-headless-overclock-utility
+Architecture: all
+Maintainer: @strebba, @afilini
+Priority: optional
+Version: 0.1
+Description: Utility to overclock Nvidia gpus in headless mode
+Section: utils
