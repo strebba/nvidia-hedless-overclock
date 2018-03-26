@@ -96,3 +96,6 @@ DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:9]/GPUMemory
 DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:10]/GPUMemoryTransferRateOffset[3]=500
 DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:11]/GPUMemoryTransferRateOffset[3]=500
 DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:12]/GPUMemoryTransferRateOffset[3]=500
+
+sudo nvidia-smi -pl 120
+sudo nvidia-smi -pm 1
