@@ -1,8 +1,56 @@
 #!/bin/bash
 
-gpu_count=`nvidia-smi -L | wc -l`
-script="/etc/nvidia-overclock/run-overclock-${gpu_count}GPU-system2.0.sh"
+gtx_1070_ti () {
+	INDEX=$1
+	if [ -z "$1" ]; then
+		INDEX=0
+	fi
 
-if [ -f ${script} ]; then
-	bash ${script}
-fi
+	nvidia-smi -i ${INDEX} --persistence-mode=1
+
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUPowerMizerMode=1
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=0
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=0
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUFanControlState=1
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [fan:${INDEX}]/GPUTargetFanSpeed=100
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=150
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=500
+
+	nvidia-smi -i ${INDEX} --power-limit=120
+}
+
+gtx_1060_6gb () {
+	INDEX=$1
+	if [ -z "$1" ]; then
+		INDEX=0
+	fi
+
+	nvidia-smi -i ${INDEX} --persistence-mode=1
+
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUPowerMizerMode=1
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=0
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=0
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUFanControlState=1
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [fan:${INDEX}]/GPUTargetFanSpeed=100
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=150
+	DISPLAY=:1 XAUTHORITY=/var/lib/mdm/:0.Xauth nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=500
+
+	nvidia-smi -i ${INDEX} --power-limit=100
+}
+
+overclock () {
+	read index;
+	read model;
+
+	if [ "$model" == "GeForce GTX 1070 Ti" ]; then
+		gtx_1070_ti ${index};
+	elif [ "$model" == "GeForce GTX 1060 6GB" ]; then
+		gtx_1060_6gb ${index};
+	else
+		echo "Unknown model ${model}";
+	fi
+}
+
+nvidia-smi --query-gpu=index,gpu_name --format=csv,noheader | while read line; do
+	echo $line | awk -F', ' '{printf "%s\n%s", $1, $2}' | overclock
+done
