@@ -8,13 +8,14 @@ gtx_1070_ti () {
 
 	nvidia-smi -i ${INDEX} --persistence-mode=1
 
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUPowerMizerMode=1 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=0 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=0 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUFanControlState=1 --ctrl-display=:1 &
-	nohup nvidia-settings -a [fan:${INDEX}]/GPUTargetFanSpeed=100 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=150 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=500 --ctrl-display=:1 &
+	nohup nvidia-settings -a [gpu:${INDEX}]/GPUPowerMizerMode=1 \
+						  -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=0 \
+						  -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=0 \
+						  -a [gpu:${INDEX}]/GPUFanControlState=1 \
+						  -a [fan:${INDEX}]/GPUTargetFanSpeed=100 \
+						  -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=150 \
+						  -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=500 \
+						  --ctrl-display=:1 &
 
 	nvidia-smi -i ${INDEX} --power-limit=130
 }
@@ -27,13 +28,14 @@ gtx_1060_6gb () {
 
 	nvidia-smi -i ${INDEX} --persistence-mode=1
 
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUPowerMizerMode=1 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=0 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=0 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUFanControlState=1 --ctrl-display=:1 &
-	nohup nvidia-settings -a [fan:${INDEX}]/GPUTargetFanSpeed=100 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=150 --ctrl-display=:1 &
-	nohup nvidia-settings -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=500 --ctrl-display=:1 &
+	nohup nvidia-settings -a [gpu:${INDEX}]/GPUPowerMizerMode=1 \
+						  -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=0 \
+						  -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=0 \
+						  -a [gpu:${INDEX}]/GPUFanControlState=1 \
+						  -a [fan:${INDEX}]/GPUTargetFanSpeed=100 \
+						  -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=150 \
+						  -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=500 \
+						  --ctrl-display=:1 &
 
 	nvidia-smi -i ${INDEX} --power-limit=100
 }
