@@ -86,7 +86,7 @@ overclock () {
 	if [ "$model" == "GeForce GTX 1070 Ti" ]; then
 		gtx_1070_ti ${index};
 	elif [ "$model" == "GeForce GTX 1060 6GB" ]; then
-		if [ "$defaul_power_limit" == "156.00 W" ]; then
+		if [ "$default_power_limit" == "156.00 W" ]; then
 			# GTX 1060 OC -> default power limit = 156W instead of 120W
 			gtx_1060_6gb_oc ${index};
 		else
