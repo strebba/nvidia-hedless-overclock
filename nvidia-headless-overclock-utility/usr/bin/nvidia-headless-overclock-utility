@@ -40,6 +40,24 @@ gtx_1060_6gb () {
 	nvidia-smi -i ${INDEX} --power-limit=100
 }
 
+gtx_1060_6gb_oc () {
+	INDEX=$1
+	if [ -z "$1" ]; then
+		INDEX=0
+	fi
+
+	nvidia-smi -i ${INDEX} --persistence-mode=1
+
+	nohup nvidia-settings -a [gpu:${INDEX}]/GPUPowerMizerMode=1 \
+						  -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=0 \
+						  -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=0 \
+						  -a [gpu:${INDEX}]/GPUFanControlState=1 \
+						  -a [fan:${INDEX}]/GPUTargetFanSpeed=100 \
+						  -a [gpu:${INDEX}]/GPUGraphicsClockOffset[3]=100 \
+						  -a [gpu:${INDEX}]/GPUMemoryTransferRateOffset[3]=150 \
+						  --ctrl-display=:1 &
+}
+
 gtx_1070 () {
 	INDEX=$1
 	if [ -z "$1" ]; then
@@ -63,11 +81,18 @@ gtx_1070 () {
 overclock () {
 	read index;
 	read model;
+	read default_power_limit;
 
 	if [ "$model" == "GeForce GTX 1070 Ti" ]; then
 		gtx_1070_ti ${index};
 	elif [ "$model" == "GeForce GTX 1060 6GB" ]; then
-		gtx_1060_6gb ${index};
+		if [ "$defaul_power_limit" == "156.00 W" ]; then
+			# GTX 1060 OC -> default power limit = 156W instead of 120W
+			gtx_1060_6gb_oc ${index};
+		else
+			# Normal GTX 1060
+			gtx_1060_6gb ${index};
+		fi
 	elif [ "$model" == "GeForce GTX 1070" ]; then
 		gtx_1070 ${index};
 	else
@@ -75,6 +100,7 @@ overclock () {
 	fi
 }
 
-nvidia-smi --query-gpu=index,gpu_name --format=csv,noheader | while read line; do
-	echo $line | awk -F', ' '{printf "%s\n%s", $1, $2}' | overclock
+nvidia-smi --query-gpu=index,gpu_name,power.default_limit --format=csv,noheader | while read line; do
+	# split by ", "
+	echo $line | awk -F', ' '{printf "%s\n%s\n%s", $1, $2, $3}' | overclock
 done
